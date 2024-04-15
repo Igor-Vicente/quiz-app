@@ -1,3 +1,3 @@
 # React + Vite
 
-(docs/img/presentation.png)
+![](/docs/img/overview.png)
