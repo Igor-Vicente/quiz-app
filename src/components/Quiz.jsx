@@ -1,18 +1,16 @@
 import { questions } from '../contants';
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 import { quizComplete } from '../assets';
+import QuestionTimer from './QuestionTimer';
 
 const Quiz = () => {
   const [userAnswer, setUserAnswer] = useState([]);
   const index = userAnswer.length;
   const over = questions.length === index;
 
-  console.log(index);
-  console.log(over);
-
-  const handleSelectAnswer = (option) => {
+  const handleSelectAnswer = useCallback((option) => {
     setUserAnswer((prevState) => [...prevState, option]);
-  };
+  }, []);
 
   if (over) {
     return (
@@ -34,9 +32,9 @@ const Quiz = () => {
 
   return (
     <div className="text-center p-8">
-      <h1 className="text-2xl font-platypi tracking-wider">
+      <h2 className="text-xl sm:text-2xl font-platypi tracking-wider">
         {questions[index].text}
-      </h1>
+      </h2>
       <ul className="mx-auto max-w-[760px] mt-8">
         {shuffledAnswers.map((option) => (
           <li key={option} className="my-4">
@@ -49,6 +47,11 @@ const Quiz = () => {
           </li>
         ))}
       </ul>
+      <QuestionTimer
+        key={index}
+        timeout={10000}
+        onTimeOver={() => handleSelectAnswer(null)}
+      />
     </div>
   );
 };
