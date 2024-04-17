@@ -1,4 +1,6 @@
-export const questions = [
+export const TIMER = 2000;
+
+export const QUESTIONS = [
   {
     id: 'q1',
     text: 'Which of the following definitions best describes React.js?',
