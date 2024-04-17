@@ -1,5 +1,6 @@
 import Header from './Header';
 import QuestionTimer from './QuestionTimer';
 import Quiz from './Quiz';
+import Answers from './Answers';
 
-export { Header, QuestionTimer, Quiz };
+export { Answers, Header, QuestionTimer, Quiz };

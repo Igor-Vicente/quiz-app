@@ -7,6 +7,10 @@ const Answers = ({ index, onSelectAnswer, onTimeOver }) => {
   const shuffledAnswers = useRef();
   const [answer, setAnswer] = useState({ selectedAnswer: '', isCorrect: null });
 
+  let timer = 10000;
+  if (answer.selectedAnswer) timer = 1000;
+  if (answer.isCorrect !== null) timer = 2000;
+
   if (shuffledAnswers.current === undefined) {
     shuffledAnswers.current = [...questions[index].answers];
     shuffledAnswers.current.sort(() => Math.random() - 0.5);
@@ -21,7 +25,7 @@ const Answers = ({ index, onSelectAnswer, onTimeOver }) => {
       });
       setTimeout(() => {
         onSelectAnswer(answer);
-      }, 1000);
+      }, 2000);
     }, 1000);
   };
 
@@ -40,14 +44,14 @@ const Answers = ({ index, onSelectAnswer, onTimeOver }) => {
           const isSelected = option === answer.selectedAnswer;
 
           if (answerState === 'answered' && isSelected) css += ' border';
-          else if (answerState === 'correct' && isSelected) css += ' bg-green-300';
-          else if (answerState === 'wrong' && isSelected) css += ' bg-red-700';
+          else if (answerState === 'correct' && isSelected) css += ' text-green-700';
+          else if (answerState === 'wrong' && isSelected) css += ' text-red-600';
           else css += ' violet-gradient';
 
           return (
             <li key={option} className="my-4">
               <button
-                onClick={() => handleSelectAnswer(option)} //onSelectAnswer
+                onClick={() => handleSelectAnswer(option)}
                 className={css}
                 disabled={answerState !== ''}
               >
@@ -57,7 +61,13 @@ const Answers = ({ index, onSelectAnswer, onTimeOver }) => {
           );
         })}
       </ul>
-      <QuestionTimer timeout={60000} onTimeOver={() => onTimeOver(null)} />
+      {answer.selectedAnswer === '' && (
+        <QuestionTimer
+          key={timer}
+          timeout={timer}
+          onTimeOver={answer.selectedAnswer === '' ? () => onTimeOver(null) : null}
+        />
+      )}
     </>
   );
 };
