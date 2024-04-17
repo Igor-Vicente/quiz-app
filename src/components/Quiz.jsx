@@ -1,20 +1,24 @@
 import { questions } from '../contants';
 import { useCallback, useState } from 'react';
 import { quizComplete } from '../assets';
-import QuestionTimer from './QuestionTimer';
+import Answers from './Answers';
 
 const Quiz = () => {
-  const [userAnswer, setUserAnswer] = useState([]);
-  const index = userAnswer.length;
+  const [userAnswers, setUserAnswers] = useState([]);
+  const index = userAnswers.length;
   const over = questions.length === index;
 
   const handleSelectAnswer = useCallback((option) => {
-    setUserAnswer((prevState) => [...prevState, option]);
+    setUserAnswers((prevState) => [...prevState, option]);
   }, []);
+
+  const handleTimeOver = () => {
+    setUserAnswers((prevState) => [...prevState, null]);
+  };
 
   if (over) {
     return (
-      <div className="text-center bg-purple-400 max-w-[760px] mx-auto shadow-md shadow-black rounded-sm  ">
+      <div className="text-center bg-purple-400 max-w-[760px] mx-auto shadow-md shadow-black rounded-sm">
         <img
           src={quizComplete}
           alt="trophy"
@@ -27,30 +31,16 @@ const Quiz = () => {
     );
   }
 
-  const shuffledAnswers = [...questions[index].answers];
-  shuffledAnswers.sort(() => Math.random() - 0.5);
-
   return (
     <div className="text-center p-8">
       <h2 className="text-xl sm:text-2xl font-platypi tracking-wider">
         {questions[index].text}
       </h2>
-      <ul className="mx-auto max-w-[760px] mt-8">
-        {shuffledAnswers.map((option) => (
-          <li key={option} className="my-4">
-            <button
-              onClick={() => handleSelectAnswer(option)}
-              className="w-full p-3 font-semibold violet-gradient rounded-md text-dimWhite hover:text-white"
-            >
-              {option}
-            </button>
-          </li>
-        ))}
-      </ul>
-      <QuestionTimer
+      <Answers
         key={index}
-        timeout={10000}
-        onTimeOver={() => handleSelectAnswer(null)}
+        index={index}
+        onSelectAnswer={handleSelectAnswer}
+        onTimeOver={handleTimeOver}
       />
     </div>
   );
